@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>五子连珠</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+        #test {
+            width: 502px;
+            height: 502px;
+            background: #f5c784;
+            padding: 100px;
+            margin:50px auto ;
+        }
+        .gobang_block {
+            width: 48px;
+            height: 48px;
+            border: 1px solid #333;
+            float: left;
+        }
+        .baiqi {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 25px;
+            margin: 4px;
+            box-shadow: inset 1px 3px 1px 0px #b9b7b7
+        }
+        .heiqi {
+            width: 40px;
+            height: 40px;
+            background: #000;
+            border-radius: 25px;
+            margin: 4px;
+            box-shadow: inset 1px 3px 1px 0px #b9b7b7
+        }
+        .btn_box {
+            width: 500px;
+            text-align: center;
+            margin: 0px auto;
+        }
+        .top {
+            border-top: 2px solid #000;
+        }
+        .bottom {
+            border-bottom: 2px solid #000;
+        }
+        .left {
+            border-left: 2px solid #000;
+        }
+        .right {
+            border-right: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div id="test">
+        <div></div>
+    </div>
+    <div class="btn_box">
+        <button id="init">重置棋盘</button>
+    </div>
+</body>
+<script>
+
+    var gobang = document.getElementById('test')
+    var init = document.getElementById('init')
+    init.addEventListener('click',function () {
+        console.log(gobang)
+        gobang.innerHTML = ''
+        drawGobang(10)
+    })
+    drawGobang(10)
+
+    // 初始化棋盘
+    function drawGobang(n) {
+        for(var i=0;i<n;i++){
+            
+            for(var j=0;j<n;j++){
+            
+                var block = document.createElement("div");
+                block.className = "gobang_block";
+                // 赋予每个格子一个id,方便以后识别并下棋，或可添加html5自定义属性data-*
+                block.id = "block_"+ i + "_" + j;
+                gobang.appendChild(block);
+            
+                // 边缘的格子属于特殊情况，需要单独绘制
+                if(i==0){
+                    block.className += " top";
+                }
+                if(i==n-1){
+                    block.className += " bottom";
+                }
+                if(j==0){
+                    block.className += " left";
+                }
+                if(j==n-1){
+                    block.className += " right";
+                }
+            }
+        }
+
+        
+        document.addEventListener('click',落子)
+    }
+
+    // 落子 白棋先手 
+    var click_number = 0;
+    function 落子 (event) {
+        var e = event
+        if (e.path[1].id == 'test') {
+            var 格子 = document.getElementById(e.path[0].id);
+
+            if (格子.childNodes.length === 0) {
+                var x = e.path[0].id.split('_')[1];
+                var y = e.path[0].id.split('_')[2];
+                var 棋子 = document.createElement("div");
+                console.log('x:',x,'--y:',y)
+                if (click_number%2) {
+                    棋子.className = "heiqi";
+                    输赢(x,y,'heiqi');
+                    格子.appendChild(棋子);
+                } else {
+                    棋子.className = "baiqi";
+                    输赢(x,y,'baiqi');
+                    格子.appendChild(棋子);
+                }
+                ++click_number;
+
+            } else {
+                console.log('该位置已经落子')
+            }
+            
+        }
+    }
+
+    // 输赢判断
+    function 输赢 (x,y,name) {
+
+        var 竖向连子 = 0;
+        var 横向连子 = 0;
+        var 左右连子 = 0;
+        var 右左连子 = 0;
+        // 竖向
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(++_x)+'_'+_y+'');
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++竖向连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(--_x)+'_'+_y+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++竖向连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 横向
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+_x+'_'+(++_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++横向连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+_x+'_'+(--_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++横向连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        // 左角到右角
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(--_x)+'_'+(--_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++左右连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(++_x)+'_'+(++_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++左右连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        // 右角到左角
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(--_x)+'_'+(++_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++右左连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        {
+            let _x = x,
+                _y = y
+            for (let i=0; i<4; i++) {
+                let test = document.getElementById('block_'+(++_x)+'_'+(--_y)+'');
+                console.log('block_'+(_x)+'_'+_y+'')
+                if (test) {
+                    if (test.childNodes.length) {
+                        if (test.childNodes[0].className === name) {
+                            console.log('连子:',++右左连子)
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (横向连子 === 4 || 竖向连子 === 4 || 左右连子 ===4 || 右左连子 === 4) {
+            setTimeout(function () {
+                alert(name == 'baiqi' ? '恭喜白棋胜利！' : '恭喜黑棋胜利！')
+                document.removeEventListener('click',落子)
+            },100)
+        }
+
+    }
+
+</script>
+<!-- 
+    1、开局 A先手，B禁止点击事件
+
+    2、A点击落子发送坐标到服务器，禁止A点击事件。
+    服务收到落子信息，发送到B客户端，在指定坐标落子，开放B点击事件。
+
+    3、B点击落子发送坐标到服务器，禁止B点击事件。
+    服务收到落子信息，发送到A客户端，在指定坐标落子，开放A点击事件。
+
+ -->
+</html>
