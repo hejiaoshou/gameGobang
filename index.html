@@ -104,7 +104,6 @@
                 }
             }
         }
-
         
         document.addEventListener('click',落子)
     }
@@ -120,10 +119,12 @@
             console.log('网络落子');
             格子 = document.getElementById(event);
             坐标 = event;
+            document.addEventListener('click',落子)
         } else if (e.path[1].id == 'test') {
             格子 = document.getElementById(e.path[0].id);
             坐标 = e.path[0].id;
             ws.send(e.path[0].id);
+            document.removeEventListener('click',落子)
         } else {
             return 0;
         }
@@ -300,9 +301,9 @@
 
     // ws
 
-        // var ws = new WebSocket("ws://192.168.10.132:80");
-        var ws = new WebSocket("ws://127.0.0.1:80");
-
+        var ws = new WebSocket("ws://192.168.10.132:80");
+        // var ws = new WebSocket("ws://127.0.0.1:80");
+        
         ws.onopen = function (evt) {
             console.log('Connection open...');
             ws.send('hello,websocket!');
@@ -317,7 +318,6 @@
         // ws.onclose = function (evt) {
         //     console.log('Connection close');
         // }
-
 
 </script>
 <!-- 

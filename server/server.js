@@ -9,13 +9,14 @@ wss.on('connection',function (ws) {
     ws.on('message', function (message) {
         console.log('received: %s', message);
         // Broadcast to everyone else.
+        console.log(wss.client);
         wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === ws.OPEN) {
             client.send(message);
             }
         });
     });
-    
+
     wss.on('close', function () {
         console.log('close connet')
     })
