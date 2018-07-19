@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>五子连珠</title>
+    <title>五子连珠 妙妙妙！</title>
     <style>
         * {
             padding: 0px;
@@ -112,30 +112,39 @@
     // 落子 白棋先手 
     var click_number = 0;
     function 落子 (event) {
-        var e = event
-        if (e.path[1].id == 'test') {
-            var 格子 = document.getElementById(e.path[0].id);
+        var e = event,
+            格子,
+            坐标;
+            console.log(typeof e)
+        if (typeof e === 'string') {
+            console.log('网络落子');
+            格子 = document.getElementById(event);
+            坐标 = event;
+        } else if (e.path[1].id == 'test') {
+            格子 = document.getElementById(e.path[0].id);
+            坐标 = e.path[0].id;
+            ws.send(e.path[0].id);
+        } else {
+            return 0;
+        }
 
-            if (格子.childNodes.length === 0) {
-                var x = e.path[0].id.split('_')[1];
-                var y = e.path[0].id.split('_')[2];
-                var 棋子 = document.createElement("div");
-                console.log('x:',x,'--y:',y)
-                if (click_number%2) {
-                    棋子.className = "heiqi";
-                    输赢(x,y,'heiqi');
-                    格子.appendChild(棋子);
-                } else {
-                    棋子.className = "baiqi";
-                    输赢(x,y,'baiqi');
-                    格子.appendChild(棋子);
-                }
-                ++click_number;
-
+        if (格子.childNodes.length === 0) {
+            var x = 坐标.split('_')[1];
+            var y = 坐标.split('_')[2];
+            var 棋子 = document.createElement("div");
+            console.log('x:',x,'--y:',y)
+            if (click_number%2) {
+                棋子.className = "heiqi";
+                输赢(x,y,'heiqi');
+                格子.appendChild(棋子);
             } else {
-                console.log('该位置已经落子')
+                棋子.className = "baiqi";
+                输赢(x,y,'baiqi');
+                格子.appendChild(棋子);
             }
-            
+            ++click_number;
+        } else {
+            console.log('该位置已经落子')
         }
     }
 
@@ -155,7 +164,7 @@
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++竖向连子)
+                            ++竖向连子
                         } else {
                             break;
                         }
@@ -168,11 +177,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+(--_x)+'_'+_y+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++竖向连子)
+                            ++竖向连子
                         } else {
                             break;
                         }
@@ -187,11 +195,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+_x+'_'+(++_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++横向连子)
+                            ++横向连子
                         } else {
                             break;
                         }
@@ -204,11 +211,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+_x+'_'+(--_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++横向连子)
+                            ++横向连子
                         } else {
                             break;
                         }
@@ -222,11 +228,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+(--_x)+'_'+(--_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++左右连子)
+                            ++左右连子
                         } else {
                             break;
                         }
@@ -239,11 +244,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+(++_x)+'_'+(++_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++左右连子)
+                            ++左右连子
                         } else {
                             break;
                         }
@@ -257,11 +261,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+(--_x)+'_'+(++_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++右左连子)
+                            ++右左连子
                         } else {
                             break;
                         }
@@ -274,11 +277,10 @@
                 _y = y
             for (let i=0; i<4; i++) {
                 let test = document.getElementById('block_'+(++_x)+'_'+(--_y)+'');
-                console.log('block_'+(_x)+'_'+_y+'')
                 if (test) {
                     if (test.childNodes.length) {
                         if (test.childNodes[0].className === name) {
-                            console.log('连子:',++右左连子)
+                            ++右左连子
                         } else {
                             break;
                         }
@@ -295,6 +297,27 @@
         }
 
     }
+
+    // ws
+
+        // var ws = new WebSocket("ws://192.168.10.132:80");
+        var ws = new WebSocket("ws://127.0.0.1:80");
+
+        ws.onopen = function (evt) {
+            console.log('Connection open...');
+            ws.send('hello,websocket!');
+        }
+
+        ws.onmessage = function (evt) {
+            console.log( "Received Message: " + evt.data);
+            落子(evt.data);
+            // ws.close();
+        }
+
+        // ws.onclose = function (evt) {
+        //     console.log('Connection close');
+        // }
+
 
 </script>
 <!-- 
