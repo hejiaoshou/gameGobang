@@ -119,17 +119,8 @@
             console.log('网络落子');
             格子 = document.getElementById(event);
             坐标 = event;
-            document.addEventListener('click',落子)
-        } else if (e.path[1].id == 'test') {
-            格子 = document.getElementById(e.path[0].id);
-            坐标 = e.path[0].id;
-            ws.send(e.path[0].id);
-            document.removeEventListener('click',落子)
-        } else {
-            return 0;
-        }
 
-        if (格子.childNodes.length === 0) {
+            if (格子.childNodes.length === 0) {
             var x = 坐标.split('_')[1];
             var y = 坐标.split('_')[2];
             var 棋子 = document.createElement("div");
@@ -143,9 +134,41 @@
                 输赢(x,y,'baiqi');
                 格子.appendChild(棋子);
             }
-            ++click_number;
+                ++click_number;
+            } else {
+                console.log('该位置已经落子')
+            }
+            console.log(click_number);
+
+            document.addEventListener('click',落子);
+        } else if (e.path[1].id == 'test') {
+            格子 = document.getElementById(e.path[0].id);
+            坐标 = e.path[0].id;
+            ws.send(e.path[0].id);
+            document.removeEventListener('click',落子);
+            
+            if (格子.childNodes.length === 0) {
+            var x = 坐标.split('_')[1];
+            var y = 坐标.split('_')[2];
+            var 棋子 = document.createElement("div");
+            console.log('x:',x,'--y:',y)
+            if (click_number%2) {
+                棋子.className = "heiqi";
+                输赢(x,y,'heiqi');
+                格子.appendChild(棋子);
+            } else {
+                棋子.className = "baiqi";
+                输赢(x,y,'baiqi');
+                格子.appendChild(棋子);
+            }
+                ++click_number;
+            } else {
+                console.log('该位置已经落子')
+            }
+            console.log(click_number);
+
         } else {
-            console.log('该位置已经落子')
+            return 0;
         }
     }
 
