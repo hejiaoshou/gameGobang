@@ -4,59 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>五子连珠 妙妙妙！</title>
-    <style>
-        * {
-            padding: 0px;
-            margin: 0px;
-        }
-        #test {
-            width: 502px;
-            height: 502px;
-            background: #f5c784;
-            padding: 100px;
-            margin:50px auto ;
-        }
-        .gobang_block {
-            width: 48px;
-            height: 48px;
-            border: 1px solid #333;
-            float: left;
-        }
-        .baiqi {
-            width: 40px;
-            height: 40px;
-            background: #fff;
-            border-radius: 25px;
-            margin: 4px;
-            box-shadow: inset 1px 3px 1px 0px #b9b7b7
-        }
-        .heiqi {
-            width: 40px;
-            height: 40px;
-            background: #000;
-            border-radius: 25px;
-            margin: 4px;
-            box-shadow: inset 1px 3px 1px 0px #b9b7b7
-        }
-        .btn_box {
-            width: 500px;
-            text-align: center;
-            margin: 0px auto;
-        }
-        .top {
-            border-top: 2px solid #000;
-        }
-        .bottom {
-            border-bottom: 2px solid #000;
-        }
-        .left {
-            border-left: 2px solid #000;
-        }
-        .right {
-            border-right: 2px solid #000;
-        }
-    </style>
+    <title>五子连珠</title>
+    <link rel="stylesheet" href="./index.css">
 </head>
 <body>
     <div id="test">
@@ -104,7 +53,6 @@
                 }
             }
         }
-        
         document.addEventListener('click',落子)
     }
 
@@ -119,7 +67,7 @@
             console.log('网络落子');
             格子 = document.getElementById(event);
             坐标 = event;
-
+            
             if (格子.childNodes.length === 0) {
             var x = 坐标.split('_')[1];
             var y = 坐标.split('_')[2];
@@ -138,7 +86,6 @@
             } else {
                 console.log('该位置已经落子')
             }
-            console.log(click_number);
 
             document.addEventListener('click',落子);
         } else if (e.path[1].id == 'test') {

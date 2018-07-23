@@ -5,10 +5,9 @@ const wss = new websocket.Server({
 });
 
 wss.on('connection',function (ws) {
-    // console.log(wss.clients);
     ws.on('message', function (message) {
         console.log('received: %s', message);
-        // Broadcast to everyone else.
+        console.dir(wss);
         console.log(wss.client);
         wss.clients.forEach(function each(client) {
             if (client !== ws && client.readyState === ws.OPEN) {
